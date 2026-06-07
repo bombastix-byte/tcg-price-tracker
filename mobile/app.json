@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "TCG Price Tracker",
+    "slug": "tcg-price-tracker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "tcgpricetracker",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#1a1a2e"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tcgpricetracker.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#1a1a2e"
+      },
+      "package": "com.tcgpricetracker.app"
+    },
+    "plugins": ["expo-router"]
+  }
+}
