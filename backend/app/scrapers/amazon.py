@@ -1,166 +1,114 @@
+import asyncio
+import json
 import logging
-import random
-import re
+import subprocess
+import sys
 from datetime import datetime
-from urllib.parse import quote
-
-import aiohttp
-from bs4 import BeautifulSoup
+from pathlib import Path
 
 from app.scrapers.base import BaseScraper, ScrapedPrice
 
 logger = logging.getLogger(__name__)
 
 AMAZON_BASE_URL = "https://www.amazon.de"
-
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-]
+_PW_FETCH_SCRIPT = str(Path(__file__).parent / "_pw_fetch.py")
 
 
 class AmazonScraper(BaseScraper):
-    """Amazon product scraper with rotating user-agents.
+    """Amazon.de product scraper using Playwright for reliable page loading."""
 
-    Note: Amazon actively blocks scraping. This is a best-effort implementation.
-    For production use, consider the Amazon Product Advertising API.
-    """
-
-    def _get_headers(self) -> dict:
-        return {
-            "User-Agent": random.choice(USER_AGENTS),
-            "Accept-Language": "de-DE,de;q=0.9,en-US;q=0.8",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        }
-
-    async def search(self, query: str, tcg: str = "") -> list[ScrapedPrice]:
-        url = f"{AMAZON_BASE_URL}/s?k={quote(query)}&i=toys"
-        prices: list[ScrapedPrice] = []
-
+    async def _fetch_page(self, url: str) -> str | None:
+        """Fetch Amazon page via Playwright subprocess."""
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    url,
-                    headers=self._get_headers(),
-                    timeout=aiohttp.ClientTimeout(total=15),
-                ) as resp:
-                    if resp.status != 200:
-                        logger.warning("Amazon returned status %d", resp.status)
-                        return prices
-                    html = await resp.text()
-
-            soup = BeautifulSoup(html, "html.parser")
-            results = soup.select('[data-component-type="s-search-result"]')
-
-            for result in results[:10]:
-                try:
-                    price_whole = result.select_one(".a-price-whole")
-                    price_frac = result.select_one(".a-price-fraction")
-                    if not price_whole:
-                        continue
-
-                    whole = price_whole.get_text(strip=True).replace(".", "").replace(",", "")
-                    frac = price_frac.get_text(strip=True) if price_frac else "00"
-                    price_val = float(f"{whole}.{frac}")
-
-                    link_el = result.select_one("a.a-link-normal.s-no-outline")
-                    href = link_el.get("href", "") if link_el else ""
-                    full_url = f"{AMAZON_BASE_URL}{href}" if href.startswith("/") else href
-
-                    title_el = result.select_one("h2 span")
-                    seller_name = title_el.get_text(strip=True)[:100] if title_el else ""
-
-                    prices.append(ScrapedPrice(
-                        marketplace="amazon",
-                        price=price_val,
-                        currency="EUR",
-                        condition="new",
-                        seller=seller_name,
-                        url=full_url,
-                        scraped_at=datetime.utcnow(),
-                    ))
-                except (ValueError, AttributeError) as e:
-                    logger.debug("Failed to parse Amazon result: %s", e)
-                    continue
-
-        except aiohttp.ClientError as e:
-            logger.error("Amazon request failed: %s", e)
-        except Exception as e:
-            logger.error("Amazon scraping error: %s", e)
-
-        return prices
-
-    async def get_price(self, product_name: str, **kwargs) -> list[ScrapedPrice]:
-        return await self.search(product_name)
-
-    async def get_price_by_url(self, url: str) -> list[ScrapedPrice]:
-        """Scrape price directly from an Amazon product page (ASIN-based URL)."""
-        # Extract ASIN from URL (e.g. /dp/B0CXXXXXX or /gp/product/B0CXXXXXX)
-        match = re.search(r"/(?:dp|gp/product)/([A-Z0-9]{10})", url)
-        asin = match.group(1) if match else None
-        product_url = f"{AMAZON_BASE_URL}/dp/{asin}" if asin else url
-
-        prices: list[ScrapedPrice] = []
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    product_url,
-                    headers=self._get_headers(),
-                    timeout=aiohttp.ClientTimeout(total=15),
-                ) as resp:
-                    if resp.status != 200:
-                        logger.warning("Amazon product page returned %d", resp.status)
-                        return prices
-                    html = await resp.text()
-
-            soup = BeautifulSoup(html, "html.parser")
-
-            # Try multiple price selectors on the product detail page
-            price_el = (
-                soup.select_one("#priceblock_ourprice")
-                or soup.select_one("#priceblock_dealprice")
-                or soup.select_one(".a-price .a-offscreen")
-                or soup.select_one("#corePrice_feature_div .a-offscreen")
+            result = await asyncio.to_thread(
+                subprocess.run,
+                [sys.executable, _PW_FETCH_SCRIPT, url, "#productTitle", "15000"],
+                capture_output=True,
+                text=True,
+                timeout=60,
             )
+            if result.returncode != 0:
+                logger.error("Amazon Playwright failed: %s", result.stderr[:500])
+                return None
+            data = json.loads(result.stdout)
+            if "error" in data:
+                logger.error("Amazon fetch error: %s", data["error"])
+                return None
+            return data["html"]
+        except Exception as e:
+            logger.error("Amazon fetch failed for %s: %s", url, e)
+            return None
 
-            if price_el:
-                price_text = price_el.get_text(strip=True)
-                # Parse German price format: "123,45 €" or "€123.45"
-                price_text = price_text.replace("€", "").replace("\xa0", "").strip()
-                price_text = price_text.replace(".", "").replace(",", ".")
-                price_val = float(price_text)
+    def _parse_price_text(self, text: str) -> float | None:
+        """Parse German price format: '120,31 €' or '1.234,56 €'."""
+        try:
+            cleaned = text.replace("€", "").replace("\xa0", "").strip()
+            # German format: dots as thousands separator, comma as decimal
+            cleaned = cleaned.replace(".", "").replace(",", ".")
+            return float(cleaned)
+        except (ValueError, AttributeError):
+            return None
 
-                title_el = soup.select_one("#productTitle")
-                title = title_el.get_text(strip=True)[:100] if title_el else ""
+    def _parse_product_page(self, html: str, url: str) -> list[ScrapedPrice]:
+        """Extract price from an Amazon product detail page."""
+        from bs4 import BeautifulSoup
 
+        prices: list[ScrapedPrice] = []
+        soup = BeautifulSoup(html, "html.parser")
+
+        title_el = soup.select_one("#productTitle")
+        title = title_el.get_text(strip=True)[:100] if title_el else ""
+
+        # Try price selectors in order of specificity
+        price_el = (
+            soup.select_one("#corePrice_feature_div .a-offscreen")
+            or soup.select_one("#corePriceDisplay_desktop_feature_div .a-offscreen")
+            or soup.select_one(".a-price .a-offscreen")
+            or soup.select_one("#priceblock_ourprice")
+            or soup.select_one("#priceblock_dealprice")
+        )
+
+        if price_el:
+            price_val = self._parse_price_text(price_el.get_text(strip=True))
+            if price_val is not None:
                 prices.append(ScrapedPrice(
                     marketplace="amazon",
                     price=price_val,
                     currency="EUR",
                     condition="new",
                     seller=title,
-                    url=product_url,
-                    scraped_at=datetime.utcnow(),
+                    url=url,
+                    scraped_at=datetime.now(tz=None),
                 ))
-        except (ValueError, AttributeError) as e:
-            logger.debug("Failed to parse Amazon product page: %s", e)
-        except aiohttp.ClientError as e:
-            logger.error("Amazon product page request failed: %s", e)
-        except Exception as e:
-            logger.error("Amazon product page scraping error: %s", e)
+        else:
+            logger.warning("No price found on Amazon page: %s", url)
 
         return prices
 
+    async def get_price_by_url(self, url: str) -> list[ScrapedPrice]:
+        """Scrape price directly from an Amazon product page."""
+        html = await self._fetch_page(url)
+        if html is None:
+            return []
+        return self._parse_product_page(html, url)
+
+    async def search(self, query: str, tcg: str = "") -> list[ScrapedPrice]:
+        """Search not reliable due to bot detection. Use marketplace links."""
+        logger.warning("Amazon search not supported. Use marketplace links with ASINs.")
+        return []
+
+    async def get_price(self, product_name: str, **kwargs) -> list[ScrapedPrice]:
+        return await self.search(product_name)
+
 
 if __name__ == "__main__":
-    import asyncio
 
     async def main():
         scraper = AmazonScraper()
-        results = await scraper.search("Pokemon 151 Booster Box")
+        results = await scraper.get_price_by_url(
+            "https://www.amazon.de/dp/B0D5PV25GL"
+        )
         for r in results:
-            print(f"  {r.price} {r.currency} - {r.seller[:50]}")
+            print(f"  {r.price} {r.currency} - {r.seller} - {r.url}")
 
     asyncio.run(main())

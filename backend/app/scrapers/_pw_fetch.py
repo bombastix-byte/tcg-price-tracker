@@ -10,7 +10,7 @@ USER_AGENT = (
 )
 
 
-def fetch(url: str) -> dict:
+def fetch(url: str, wait_selector: str = "dt", timeout: int = 20000) -> dict:
     with sync_playwright() as p:
         browser = p.chromium.launch(
             headless=True,
@@ -19,10 +19,11 @@ def fetch(url: str) -> dict:
         ctx = browser.new_context(
             user_agent=USER_AGENT,
             viewport={"width": 1920, "height": 1080},
+            locale="de-DE",
         )
         page = ctx.new_page()
         page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        page.wait_for_selector("dt", timeout=20000)
+        page.wait_for_selector(wait_selector, timeout=timeout)
         html = page.content()
         browser.close()
         return {"html": html}
@@ -30,8 +31,10 @@ def fetch(url: str) -> dict:
 
 if __name__ == "__main__":
     url = sys.argv[1]
+    wait_sel = sys.argv[2] if len(sys.argv) > 2 else "dt"
+    wait_timeout = int(sys.argv[3]) if len(sys.argv) > 3 else 20000
     try:
-        result = fetch(url)
+        result = fetch(url, wait_sel, wait_timeout)
         print(json.dumps(result))
     except Exception as e:
         print(json.dumps({"error": str(e)}))
