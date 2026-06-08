@@ -73,6 +73,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2023-08-11",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_pokemon("Booster-Boxes", "Obsidian-Flames-Booster-Box"), "external_id": "715465"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0C6D9YN1J", "external_id": "B0C6D9YN1J"},
         ],
     },
     {
@@ -178,6 +179,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2024-05-24",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_pokemon("Booster-Boxes", "Twilight-Masquerade-Booster-Box"), "external_id": "761219"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0DDT137S3", "external_id": "B0DDT137S3"},
         ],
     },
     {
@@ -223,6 +225,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2024-11-08",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_pokemon("Booster-Boxes", "Surging-Sparks-Booster-Box"), "external_id": "784949"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0DFBGYFD3", "external_id": "B0DFBGYFD3"},
         ],
     },
     {
@@ -247,6 +250,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2025-01-17",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_pokemon("Booster-Boxes", "Prismatic-Evolutions-Booster-Bundle"), "external_id": "798924"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0DN98RVZM", "external_id": "B0DN98RVZM"},
         ],
     },
     {
@@ -305,6 +309,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2023-06-23",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "The-Lord-of-the-Rings-Tales-of-Middle-earth-Draft-Booster-Box"), "external_id": "698913"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0BVT3ZL13", "external_id": "B0BVT3ZL13"},
         ],
     },
     {
@@ -316,6 +321,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2023-09-08",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "Wilds-of-Eldraine-Collector-Booster-Box"), "external_id": "719684"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0C3T4VZN8", "external_id": "B0C3T4VZN8"},
         ],
     },
     {
@@ -341,6 +347,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2024-02-09",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "Murders-at-Karlov-Manor-Play-Booster-Box"), "external_id": "748053"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0CMR46LJC", "external_id": "B0CMR46LJC"},
         ],
     },
     {
@@ -363,6 +370,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2024-04-19",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "Outlaws-of-Thunder-Junction-Play-Booster-Box"), "external_id": "758329"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0CTKVW1KY", "external_id": "B0CTKVW1KY"},
         ],
     },
     {
@@ -374,6 +382,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2024-06-14",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "Modern-Horizons-3-Play-Booster-Box"), "external_id": "758482"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0CTLT5DJQ", "external_id": "B0CTLT5DJQ"},
         ],
     },
     {
@@ -385,6 +394,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2024-06-14",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "Modern-Horizons-3-Collector-Booster-Box"), "external_id": "758483"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0CTLL4PMF", "external_id": "B0CTLL4PMF"},
         ],
     },
     {
@@ -420,6 +430,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2024-11-15",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "Magic-The-Gathering-Foundations-Play-Booster-Box"), "external_id": "781940"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0D9KYV7B8", "external_id": "B0D9KYV7B8"},
         ],
     },
     {
@@ -431,6 +442,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2024-11-15",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "Magic-The-Gathering-Foundations-Collector-Booster-Box"), "external_id": "781941"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0D9KZ7MRG", "external_id": "B0D9KZ7MRG"},
         ],
     },
 
@@ -456,6 +468,7 @@ SAMPLE_PRODUCTS = [
         "release_date": "2025-04-11",
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "Tarkir-Dragonstorm-Play-Booster-Box"), "external_id": "813081"},
+            {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0DSQZC4PB", "external_id": "B0DSQZC4PB"},
         ],
     },
 ]
