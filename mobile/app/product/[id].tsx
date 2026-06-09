@@ -137,6 +137,8 @@ export default function ProductDetailScreen() {
     cardmarket: { icon: "storefront", color: "#0070ba", label: "Cardmarket" },
     ebay: { icon: "pricetag", color: "#e53238", label: "eBay" },
     amazon: { icon: "cart", color: "#ff9900", label: "Amazon" },
+    idealo: { icon: "search", color: "#1a5ea4", label: "Idealo" },
+    geizhals: { icon: "flame", color: "#ff6600", label: "Geizhals" },
   };
 
   return (
@@ -153,7 +155,7 @@ export default function ProductDetailScreen() {
           {/* Shop link icons */}
           {Object.keys(linkByMarketplace).length > 0 && (
             <View style={styles.shopIcons}>
-              {(["cardmarket", "ebay", "amazon"] as const).map((mp) => {
+              {(["cardmarket", "ebay", "amazon", "idealo", "geizhals"] as const).map((mp) => {
                 const link = linkByMarketplace[mp];
                 if (!link?.url) return null;
                 const cfg = MP_ICONS[mp];
@@ -182,7 +184,7 @@ export default function ProductDetailScreen() {
       {/* Marketplace Prices */}
       <Text style={styles.sectionTitle}>Current Prices</Text>
       <View style={styles.pricesRow}>
-        {(["cardmarket", "ebay", "amazon"] as const).map((mp) => (
+        {(["cardmarket", "ebay", "amazon", "idealo", "geizhals"] as const).map((mp) => (
           <MarketplacePrice
             key={mp}
             marketplace={mp}

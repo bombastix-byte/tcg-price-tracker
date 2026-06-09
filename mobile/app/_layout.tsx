@@ -15,6 +15,10 @@ export default function RootLayout() {
         name="product/[id]"
         options={{ title: "Product Details" }}
       />
+      <Stack.Screen
+        name="set/[code]"
+        options={{ title: "Set Details" }}
+      />
     </Stack>
   );
 }

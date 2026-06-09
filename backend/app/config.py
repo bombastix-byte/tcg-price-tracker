@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     ebay_client_id: str = ""
     ebay_client_secret: str = ""
 
+    # Pokemon TCG API (optional, for higher rate limits)
+    pokemon_tcg_api_key: str = ""
+
     # Scheduler
     price_update_interval_hours: int = 6
 

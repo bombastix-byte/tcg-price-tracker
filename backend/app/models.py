@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import String, Float, Boolean, DateTime, ForeignKey, Enum as SAEnum, UniqueConstraint
+from sqlalchemy import Integer, String, Float, Boolean, DateTime, ForeignKey, Enum as SAEnum, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 import enum
 
@@ -25,6 +25,8 @@ class Marketplace(str, enum.Enum):
     CARDMARKET = "cardmarket"
     EBAY = "ebay"
     AMAZON = "amazon"
+    IDEALO = "idealo"
+    GEIZHALS = "geizhals"
 
 
 class AlertDirection(str, enum.Enum):
@@ -43,6 +45,7 @@ class Product(Base):
     set_code: Mapped[str] = mapped_column(String(20), default="")
     image_url: Mapped[str] = mapped_column(String(500), default="")
     release_date: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    pack_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     prices: Mapped[list["Price"]] = relationship(back_populates="product", cascade="all, delete-orphan")
@@ -93,3 +96,18 @@ class MarketplaceLink(Base):
     external_id: Mapped[str] = mapped_column(String(200), default="")
 
     product: Mapped["Product"] = relationship(back_populates="marketplace_links")
+
+
+class SetCache(Base):
+    __tablename__ = "set_cache"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    set_code: Mapped[str] = mapped_column(String(20), unique=True, index=True)
+    tcg: Mapped[str] = mapped_column(SAEnum(TCG))
+    set_name: Mapped[str] = mapped_column(String(200))
+    release_date: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    total_cards: Mapped[int] = mapped_column(Integer, default=0)
+    logo_url: Mapped[str] = mapped_column(String(500), default="")
+    symbol_url: Mapped[str] = mapped_column(String(500), default="")
+    top_cards_json: Mapped[str] = mapped_column(String(5000), default="[]")
+    fetched_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

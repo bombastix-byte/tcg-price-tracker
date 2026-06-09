@@ -3,10 +3,28 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import init_db
-from app.routers import products, prices, alerts
+import asyncio
+import logging
+
+from app.database import init_db, async_session
+from app.routers import products, prices, alerts, sets
 from app.services.scheduler import start_scheduler, stop_scheduler
+from app.services.set_service import prefetch_set_logos
 from app.seed import seed_sample_products
+
+logger = logging.getLogger(__name__)
+
+
+async def _prefetch_logos_background():
+    """Prefetch set logos in the background after startup."""
+    await asyncio.sleep(1)  # Let the server start first
+    try:
+        async with async_session() as db:
+            count = await prefetch_set_logos(db)
+            if count:
+                logger.info("Prefetched logos for %d sets", count)
+    except Exception as e:
+        logger.warning("Logo prefetch failed: %s", e)
 
 
 @asynccontextmanager
@@ -14,6 +32,8 @@ async def lifespan(app: FastAPI):
     await init_db()
     await seed_sample_products()
     start_scheduler()
+    # Fire-and-forget background task for logo prefetching
+    asyncio.create_task(_prefetch_logos_background())
     yield
     stop_scheduler()
 
@@ -31,6 +51,7 @@ app.add_middleware(
 app.include_router(products.router, prefix="/products", tags=["products"])
 app.include_router(prices.router, prefix="/prices", tags=["prices"])
 app.include_router(alerts.router, prefix="/alerts", tags=["alerts"])
+app.include_router(sets.router, prefix="/sets", tags=["sets"])
 
 
 @app.get("/")

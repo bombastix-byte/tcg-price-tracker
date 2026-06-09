@@ -13,6 +13,7 @@ class ProductCreate(BaseModel):
     set_code: str = ""
     image_url: str = ""
     release_date: str | None = None
+    pack_count: int | None = None
 
 
 class ProductOut(BaseModel):
@@ -24,6 +25,7 @@ class ProductOut(BaseModel):
     set_code: str
     image_url: str
     release_date: str | None
+    pack_count: int | None = None
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -73,6 +75,8 @@ class PriceHistoryPoint(BaseModel):
     cardmarket: float | None = None
     ebay: float | None = None
     amazon: float | None = None
+    idealo: float | None = None
+    geizhals: float | None = None
 
 
 # --- Alert ---
@@ -100,3 +104,43 @@ class AlertUpdate(BaseModel):
     target_price: float | None = None
     direction: AlertDirection | None = None
     is_active: bool | None = None
+
+
+# --- Set ---
+
+class TopCard(BaseModel):
+    name: str
+    image_url: str
+    price_eur: float | None = None
+
+
+class SetSummary(BaseModel):
+    set_code: str
+    tcg: TCG
+    set_name: str
+    release_date: str | None
+    logo_url: str = ""
+    product_count: int = 0
+
+
+class BoosterValue(BaseModel):
+    product: ProductOut
+    lowest_price: float | None = None
+    pack_count: int = 1
+    price_per_pack: float | None = None
+    top_card_value: float | None = None
+    value_score: float | None = None
+
+
+class SetDetail(BaseModel):
+    set_code: str
+    tcg: TCG
+    set_name: str
+    release_date: str | None
+    logo_url: str = ""
+    symbol_url: str = ""
+    total_cards: int = 0
+    top_cards: list[TopCard] = []
+    sealed_products: list[ProductWithPrices] = []
+    booster_values: list[BoosterValue] = []
+    price_trend: list[PriceHistoryPoint] = []

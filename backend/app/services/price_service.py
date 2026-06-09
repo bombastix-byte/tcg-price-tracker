@@ -10,6 +10,8 @@ from app.models import Product, Price, Marketplace, MarketplaceLink
 from app.scrapers.cardmarket import CardmarketScraper
 from app.scrapers.ebay import EbayScraper
 from app.scrapers.amazon import AmazonScraper
+from app.scrapers.idealo import IdealoScraper
+from app.scrapers.geizhals import GeizhalsScaper
 from app.scrapers.base import BaseScraper, ScrapedPrice
 
 logger = logging.getLogger(__name__)
@@ -18,6 +20,8 @@ MARKETPLACE_SCRAPERS: dict[str, type[BaseScraper]] = {
     "cardmarket": CardmarketScraper,
     "ebay": EbayScraper,
     "amazon": AmazonScraper,
+    "idealo": IdealoScraper,
+    "geizhals": GeizhalsScaper,
 }
 
 
@@ -126,7 +130,7 @@ async def get_price_history(
     for date_str, marketplace, min_price in rows:
         d = str(date_str)
         if d not in history:
-            history[d] = {"date": d, "cardmarket": None, "ebay": None, "amazon": None}
+            history[d] = {"date": d, "cardmarket": None, "ebay": None, "amazon": None, "idealo": None, "geizhals": None}
         history[d][marketplace] = min_price
 
     return list(history.values())

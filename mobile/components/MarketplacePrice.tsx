@@ -6,6 +6,8 @@ const MP_CONFIG: Record<string, { label: string; color: string; icon: string }> 
   cardmarket: { label: "Cardmarket", color: "#0070ba", icon: "storefront" },
   ebay: { label: "eBay", color: "#e53238", icon: "pricetag" },
   amazon: { label: "Amazon", color: "#ff9900", icon: "cart" },
+  idealo: { label: "Idealo", color: "#1a5ea4", icon: "search" },
+  geizhals: { label: "Geizhals", color: "#ff6600", icon: "flame" },
 };
 
 interface Props {

@@ -8,6 +8,8 @@ const COLORS: Record<string, string> = {
   cardmarket: "#0070ba",
   ebay: "#e53238",
   amazon: "#ff9900",
+  idealo: "#1a5ea4",
+  geizhals: "#ff6600",
 };
 
 interface Props {
@@ -35,7 +37,7 @@ export default function PriceChart({ data }: Props) {
   const datasets: { data: number[]; color: () => string; strokeWidth: number }[] = [];
   const legend: string[] = [];
 
-  for (const mp of ["cardmarket", "ebay", "amazon"] as const) {
+  for (const mp of ["cardmarket", "ebay", "amazon", "idealo", "geizhals"] as const) {
     const values = data.map((d) => d[mp]);
     if (values.every((v) => v === null)) continue;
 

@@ -14,13 +14,13 @@ router = APIRouter()
 
 # Base prices for demo data (by category)
 _DEMO_BASE_PRICES = {
-    "booster_box": {"cardmarket": 135.0, "ebay": 142.0, "amazon": 149.99},
-    "etb": {"cardmarket": 42.0, "ebay": 45.0, "amazon": 49.99},
-    "blister": {"cardmarket": 28.0, "ebay": 32.0, "amazon": 34.99},
-    "collection_box": {"cardmarket": 95.0, "ebay": 105.0, "amazon": 119.99},
-    "bundle": {"cardmarket": 32.0, "ebay": 36.0, "amazon": 39.99},
-    "booster_pack": {"cardmarket": 4.0, "ebay": 4.50, "amazon": 5.49},
-    "other": {"cardmarket": 25.0, "ebay": 28.0, "amazon": 32.99},
+    "booster_box": {"cardmarket": 135.0, "ebay": 142.0, "amazon": 149.99, "idealo": 139.0, "geizhals": 137.0},
+    "etb": {"cardmarket": 42.0, "ebay": 45.0, "amazon": 49.99, "idealo": 44.0, "geizhals": 43.0},
+    "blister": {"cardmarket": 28.0, "ebay": 32.0, "amazon": 34.99, "idealo": 30.0, "geizhals": 29.50},
+    "collection_box": {"cardmarket": 95.0, "ebay": 105.0, "amazon": 119.99, "idealo": 99.0, "geizhals": 97.0},
+    "bundle": {"cardmarket": 32.0, "ebay": 36.0, "amazon": 39.99, "idealo": 34.0, "geizhals": 33.0},
+    "booster_pack": {"cardmarket": 4.0, "ebay": 4.50, "amazon": 5.49, "idealo": 4.20, "geizhals": 4.10},
+    "other": {"cardmarket": 25.0, "ebay": 28.0, "amazon": 32.99, "idealo": 27.0, "geizhals": 26.0},
 }
 
 

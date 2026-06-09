@@ -8,7 +8,7 @@ const API_BASE = Platform.select({
 export interface MarketplaceLink {
   id: number;
   product_id: number;
-  marketplace: "cardmarket" | "ebay" | "amazon";
+  marketplace: "cardmarket" | "ebay" | "amazon" | "idealo" | "geizhals";
   url: string;
   external_id: string;
 }
@@ -22,6 +22,7 @@ export interface Product {
   set_code: string;
   image_url: string;
   release_date: string | null;
+  pack_count: number | null;
   created_at: string;
   lowest_prices?: Record<string, number | null>;
   marketplace_links?: MarketplaceLink[];
@@ -30,7 +31,7 @@ export interface Product {
 export interface Price {
   id: number;
   product_id: number;
-  marketplace: "cardmarket" | "ebay" | "amazon";
+  marketplace: "cardmarket" | "ebay" | "amazon" | "idealo" | "geizhals";
   price: number;
   currency: string;
   condition: string;
@@ -44,6 +45,8 @@ export interface PriceHistoryPoint {
   cardmarket: number | null;
   ebay: number | null;
   amazon: number | null;
+  idealo: number | null;
+  geizhals: number | null;
 }
 
 export interface Alert {
@@ -137,3 +140,56 @@ export const deleteMarketplaceLink = (productId: number, linkId: number) =>
   request<void>(`/products/${productId}/links/${linkId}`, {
     method: "DELETE",
   });
+
+// --- Sets ---
+
+export interface TopCard {
+  name: string;
+  image_url: string;
+  price_eur: number | null;
+}
+
+export interface SetSummary {
+  set_code: string;
+  tcg: "pokemon" | "magic";
+  set_name: string;
+  release_date: string | null;
+  logo_url: string;
+  product_count: number;
+}
+
+export interface BoosterValue {
+  product: Product;
+  lowest_price: number | null;
+  pack_count: number;
+  price_per_pack: number | null;
+  top_card_value: number | null;
+  value_score: number | null;
+}
+
+export interface SetDetail {
+  set_code: string;
+  tcg: "pokemon" | "magic";
+  set_name: string;
+  release_date: string | null;
+  logo_url: string;
+  symbol_url: string;
+  total_cards: number;
+  top_cards: TopCard[];
+  sealed_products: Product[];
+  booster_values: BoosterValue[];
+  price_trend: PriceHistoryPoint[];
+}
+
+export const getSets = (params?: { tcg?: string }) => {
+  const query = new URLSearchParams();
+  if (params?.tcg) query.set("tcg", params.tcg);
+  const qs = query.toString();
+  return request<SetSummary[]>(`/sets/${qs ? `?${qs}` : ""}`);
+};
+
+export const getSetDetail = (setCode: string) =>
+  request<SetDetail>(`/sets/${encodeURIComponent(setCode)}`);
+
+export const getTopDeals = (limit = 10) =>
+  request<BoosterValue[]>(`/sets/top-deals?limit=${limit}`);

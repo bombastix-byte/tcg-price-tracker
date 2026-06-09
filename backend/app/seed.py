@@ -28,6 +28,7 @@ SAMPLE_PRODUCTS = [
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_pokemon("Booster-Boxes", "Scarlet-Violet-Booster-Box"), "external_id": "692092"},
             {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0CJC2MH21", "external_id": "B0CJC2MH21"},
+            {"marketplace": Marketplace.GEIZHALS, "url": "https://geizhals.de/pokemon-sammelkartenspiel-karmesin-purpur-top-trainer-box-a2951578.html", "external_id": "2951578"},
         ],
     },
     {
@@ -226,6 +227,8 @@ SAMPLE_PRODUCTS = [
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_pokemon("Booster-Boxes", "Surging-Sparks-Booster-Box"), "external_id": "784949"},
             {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0DFBGYFD3", "external_id": "B0DFBGYFD3"},
+            {"marketplace": Marketplace.IDEALO, "url": "https://www.idealo.de/preisvergleich/OffersOfProduct/203385194_-pokemon-karmesin-purpur-funkenflug-display-36-booster-packs-pokemon.html", "external_id": "203385194"},
+            {"marketplace": Marketplace.GEIZHALS, "url": "https://geizhals.de/pokemon-sammelkartenspiel-karmesin-purpur-funkenflug-display-36-booster-packs-a3289009.html", "external_id": "3289009"},
         ],
     },
     {
@@ -251,6 +254,8 @@ SAMPLE_PRODUCTS = [
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_pokemon("Booster-Boxes", "Prismatic-Evolutions-Booster-Bundle"), "external_id": "798924"},
             {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0DN98RVZM", "external_id": "B0DN98RVZM"},
+            {"marketplace": Marketplace.IDEALO, "url": "https://www.idealo.de/preisvergleich/OffersOfProduct/203791818_-pokemon-karmesin-purpur-prismatische-entwicklungen-booster-bundle-pokemon.html", "external_id": "203791818"},
+            {"marketplace": Marketplace.GEIZHALS, "url": "https://geizhals.de/pokemon-sammelkartenspiel-karmesin-purpur-prismatische-entwicklungen-booster-bundle-6-booster-packs-a3350413.html", "external_id": "3350413"},
         ],
     },
     {
@@ -285,6 +290,8 @@ SAMPLE_PRODUCTS = [
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_pokemon("Booster-Boxes", "Journey-Together-Booster-Box"), "external_id": "805579"},
             {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0F1GXTFGL", "external_id": "B0F1GXTFGL"},
+            {"marketplace": Marketplace.IDEALO, "url": "https://www.idealo.de/preisvergleich/OffersOfProduct/204548857_-pokemon-karmesin-purpur-gemeinsam-staerker-display-36-booster-packs-pokemon.html", "external_id": "204548857"},
+            {"marketplace": Marketplace.GEIZHALS, "url": "https://geizhals.de/pokemon-sammelkartenspiel-karmesin-purpur-gemeinsam-staerker-display-36-booster-packs-a3388486.html", "external_id": "3388486"},
         ],
     },
     {
@@ -383,6 +390,8 @@ SAMPLE_PRODUCTS = [
         "links": [
             {"marketplace": Marketplace.CARDMARKET, "url": _cm_magic("Booster-Boxes", "Modern-Horizons-3-Play-Booster-Box"), "external_id": "758482"},
             {"marketplace": Marketplace.AMAZON, "url": "https://www.amazon.de/dp/B0CTLT5DJQ", "external_id": "B0CTLT5DJQ"},
+            {"marketplace": Marketplace.IDEALO, "url": "https://www.idealo.de/preisvergleich/OffersOfProduct/203092166_-magic-the-gathering-modern-horizons-3-play-booster-display-36-booster-packs-wizards-of-the-coast.html", "external_id": "203092166"},
+            {"marketplace": Marketplace.GEIZHALS, "url": "https://geizhals.de/magic-the-gathering-modern-horizons-3-play-booster-display-36-packs-a3240783.html", "external_id": "3240783"},
         ],
     },
     {
